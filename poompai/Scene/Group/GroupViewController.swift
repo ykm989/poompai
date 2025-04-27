@@ -28,7 +28,10 @@ final class GroupViewController: UIViewController {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.placeholder = "그룹명을 입력하세요."
-        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .white
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
+        textField.leftViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -44,7 +47,10 @@ final class GroupViewController: UIViewController {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.placeholder = "사용자명"
-        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.backgroundColor = .white
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
+        textField.leftViewMode = .always
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -67,11 +73,19 @@ final class GroupViewController: UIViewController {
     
     private let tablewView: UITableView = {
         let tableView = UITableView()
-        tableView.layer.borderWidth = 1
         tableView.layer.cornerRadius = 15
         tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
+    }()
+    
+    private let completedButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 5
+        button.setTitle("완료", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     // MARK: - init
@@ -104,7 +118,7 @@ final class GroupViewController: UIViewController {
 
 private extension GroupViewController {
     func setUpLayout() {
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .secondarySystemBackground
         self.navigationItem.title = "그룹 추가"
         
         addViews()
@@ -113,7 +127,7 @@ private extension GroupViewController {
     }
     
     func addViews() {
-        [ groupNameLabel, groupNameTextField, userAddLabel, userNameTextField, userAddButton, userListLabel, tablewView ].forEach {
+        [ groupNameLabel, groupNameTextField, userAddLabel, userNameTextField, userAddButton, userListLabel, tablewView, completedButton ].forEach {
             self.view.addSubview($0)
         }
     }
@@ -128,6 +142,7 @@ private extension GroupViewController {
             groupNameTextField.topAnchor.constraint(equalTo: groupNameLabel.bottomAnchor, constant: 10),
             groupNameTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             groupNameTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            groupNameTextField.heightAnchor.constraint(equalToConstant: 50),
             
             userAddLabel.topAnchor.constraint(equalTo: groupNameTextField.bottomAnchor, constant: 20),
             userAddLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -136,6 +151,7 @@ private extension GroupViewController {
             userNameTextField.topAnchor.constraint(equalTo: userAddLabel.bottomAnchor, constant: 10),
             userNameTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             userNameTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            userNameTextField.heightAnchor.constraint(equalToConstant: 50),
             
             userAddButton.topAnchor.constraint(equalTo: self.userNameTextField.bottomAnchor, constant: 20),
             userAddButton.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
@@ -150,7 +166,12 @@ private extension GroupViewController {
             tablewView.topAnchor.constraint(equalTo: self.userListLabel.bottomAnchor, constant: 20),
             tablewView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             tablewView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            tablewView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            tablewView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -90),
+            
+            completedButton.topAnchor.constraint(equalTo: self.tablewView.bottomAnchor, constant: 20),
+            completedButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            completedButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            completedButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
     
