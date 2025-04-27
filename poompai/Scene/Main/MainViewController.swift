@@ -17,7 +17,9 @@ final class MainViewController: UIViewController {
         flowLayout.minimumInteritemSpacing = 10
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = .lightGray
+        collectionView.backgroundColor = .white
+        collectionView.layer.borderWidth = 1
+        collectionView.layer.cornerRadius = 15
         collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(GroupListCell.self, forCellWithReuseIdentifier: "GroupListCell")
@@ -43,6 +45,7 @@ extension MainViewController {
         setLayoutConstraints()
         
         self.view.backgroundColor = .white
+        self.navigationItem.title = "뿜빠이"
     }
     
     private func addViews() {

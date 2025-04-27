@@ -20,7 +20,6 @@ final class GroupViewController: UIViewController {
     private let groupNameLabel: UILabel = {
         let label = UILabel()
         label.text = "그룹명"
-        label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -34,17 +33,41 @@ final class GroupViewController: UIViewController {
         return textField
     }()
     
+    private let userAddLabel: UILabel = {
+        let label = UILabel()
+        label.text = "그룹원 추가"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let userNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.autocapitalizationType = .none
+        textField.placeholder = "사용자명"
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    private let userAddButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 5
+        button.setTitle("+ 추가", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private let userListLabel: UILabel = {
         let label = UILabel()
         label.text = "그룹원"
-        label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let tablewView: UITableView = {
         let tableView = UITableView()
-        tableView.layer.borderWidth = 0.5
+        tableView.layer.borderWidth = 1
         tableView.layer.cornerRadius = 15
         tableView.backgroundColor = .white
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +112,7 @@ private extension GroupViewController {
     }
     
     func addViews() {
-        [ groupNameLabel, groupNameTextField, userListLabel, tablewView ].forEach {
+        [ groupNameLabel, groupNameTextField, userAddLabel, userNameTextField, userAddButton, userListLabel, tablewView ].forEach {
             self.view.addSubview($0)
         }
     }
@@ -105,7 +128,21 @@ private extension GroupViewController {
             groupNameTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             groupNameTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
-            userListLabel.topAnchor.constraint(equalTo: self.groupNameTextField.bottomAnchor, constant: 30),
+            userAddLabel.topAnchor.constraint(equalTo: groupNameTextField.bottomAnchor, constant: 20),
+            userAddLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            userAddLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            userNameTextField.topAnchor.constraint(equalTo: userAddLabel.bottomAnchor, constant: 10),
+            userNameTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            userNameTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            userAddButton.topAnchor.constraint(equalTo: self.userNameTextField.bottomAnchor, constant: 20),
+            userAddButton.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
+            userAddButton.heightAnchor.constraint(equalToConstant: 50),
+            userAddButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            userAddButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            
+            userListLabel.topAnchor.constraint(equalTo: self.userAddButton.bottomAnchor, constant: 30),
             userListLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             userListLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             
