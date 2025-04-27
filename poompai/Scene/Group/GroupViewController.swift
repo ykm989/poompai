@@ -109,6 +109,7 @@ private extension GroupViewController {
         
         addViews()
         setLayoutConstraints()
+        addTargets()
     }
     
     func addViews() {
@@ -152,6 +153,10 @@ private extension GroupViewController {
             tablewView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
         ])
     }
+    
+    private func addTargets() {
+        self.userAddButton.addTarget(self, action: #selector(addUserButtonTouched), for: .touchUpInside)
+    }
 }
 
 // MARK: - Button Methods
@@ -161,6 +166,10 @@ private extension GroupViewController {
         let groupAddPopupViewController = GroupAddViewController(viewModel: viewModel)
         groupAddPopupViewController.modalPresentationStyle = .overFullScreen
         self.present(groupAddPopupViewController, animated: false)
+    }
+    
+    @objc func addUserButtonTouched() {
+        self.inputSubject.send(.userAdd(self.userNameTextField.text ?? ""))
     }
 }
 
@@ -199,5 +208,9 @@ extension GroupViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.setName(viewModel.userList[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
 }
