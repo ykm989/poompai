@@ -79,14 +79,7 @@ final class GroupViewController: UIViewController {
         return tableView
     }()
     
-    private let completedButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .blue
-        button.layer.cornerRadius = 5
-        button.setTitle("완료", for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    private let completeBarButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(completedButtonTouched))
     
     // MARK: - init
 
@@ -99,7 +92,6 @@ final class GroupViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -109,7 +101,7 @@ final class GroupViewController: UIViewController {
         bind()
         delegates()
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addGroupButtonTouched))
+        
     }
 }
 
@@ -124,12 +116,18 @@ private extension GroupViewController {
         addViews()
         setLayoutConstraints()
         addTargets()
+        setupNavigation()
     }
     
     func addViews() {
-        [ groupNameLabel, groupNameTextField, userAddLabel, userNameTextField, userAddButton, userListLabel, tablewView, completedButton ].forEach {
+        [ groupNameLabel, groupNameTextField, userAddLabel, userNameTextField, userAddButton, userListLabel, tablewView ].forEach {
             self.view.addSubview($0)
         }
+    }
+    
+    func setupNavigation() {
+        self.navigationItem.rightBarButtonItem = completeBarButton
+        completeBarButton.isEnabled = false
     }
     
     func setLayoutConstraints() {
@@ -166,31 +164,31 @@ private extension GroupViewController {
             tablewView.topAnchor.constraint(equalTo: self.userListLabel.bottomAnchor, constant: 20),
             tablewView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             tablewView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            tablewView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -90),
-            
-            completedButton.topAnchor.constraint(equalTo: self.tablewView.bottomAnchor, constant: 20),
-            completedButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            completedButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            completedButton.heightAnchor.constraint(equalToConstant: 50),
+            tablewView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
         ])
     }
     
     private func addTargets() {
         self.userAddButton.addTarget(self, action: #selector(addUserButtonTouched), for: .touchUpInside)
+        self.groupNameTextField.addTarget(self, action: #selector(groupNameTextFieldDidChanged(_:)), for: .editingChanged)
     }
 }
 
 // MARK: - Button Methods
 
 private extension GroupViewController {
-    @objc func addGroupButtonTouched() {
-        let groupAddPopupViewController = GroupAddViewController(viewModel: viewModel)
-        groupAddPopupViewController.modalPresentationStyle = .overFullScreen
-        self.present(groupAddPopupViewController, animated: false)
-    }
-    
     @objc func addUserButtonTouched() {
         self.inputSubject.send(.userAdd(self.userNameTextField.text ?? ""))
+        self.userNameTextField.text = ""
+    }
+    
+    @objc func completedButtonTouched() {
+        self.inputSubject.send(.complete)
+    }
+    
+    @objc func groupNameTextFieldDidChanged(_ sender: Any?) {
+        guard let groupName = self.groupNameTextField.text else { return }
+        inputSubject.send(.groupNameInput(groupName))
     }
 }
 
@@ -205,6 +203,12 @@ private extension GroupViewController {
                 switch output {
                 case .userAdd:
                     self?.tablewView.reloadData()
+                case .isCompletePossible:
+                    self?.completeBarButton.isEnabled = true
+                    self?.completeBarButton.tintColor = .systemBlue
+                case .isCompleteImpossible:
+                    self?.completeBarButton.isEnabled = false
+                    self?.completeBarButton.tintColor = .systemGray
                 }
             }
             .store(in: &subscriptions)
