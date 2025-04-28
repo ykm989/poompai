@@ -9,12 +9,14 @@ import Foundation
 import CoreData
 
 final class GroupService {
-    static func createGroup(name: String) {
+    static func createGroup(name: String) -> Group {
         let group = Group(context: CoreDataManager.shared.context)
         group.id = UUID()
         group.name = name
         group.createdAt = Date()
         CoreDataManager.shared.saveContext()
+        
+        return group
     }
     
     static func fetchGroups() -> [Group] {

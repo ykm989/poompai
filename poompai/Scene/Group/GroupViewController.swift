@@ -100,8 +100,6 @@ final class GroupViewController: UIViewController {
         setUpLayout()
         bind()
         delegates()
-        
-        
     }
 }
 
@@ -209,6 +207,8 @@ private extension GroupViewController {
                 case .isCompleteImpossible:
                     self?.completeBarButton.isEnabled = false
                     self?.completeBarButton.tintColor = .systemGray
+                case .createComplete:
+                    self?.navigationController?.popViewController(animated: true)
                 }
             }
             .store(in: &subscriptions)

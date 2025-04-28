@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class GroupViewModel: ObservableObject {
     private var subscriptions: Set<AnyCancellable> = []
@@ -16,14 +17,15 @@ final class GroupViewModel: ObservableObject {
     
     enum Input {
         case userAdd(String)
-        case complete
         case groupNameInput(String)
+        case complete
     }
     
     enum Output {
         case userAdd
         case isCompletePossible
         case isCompleteImpossible
+        case createComplete
     }
 }
 
@@ -40,7 +42,7 @@ extension GroupViewModel {
                     self?.groupName = groupName
                     self?.canCompleteGroup()
                 case .complete:
-                    debugPrint("complete")
+                    self?.createGroup()
                 }
             }
             .store(in: &subscriptions)
@@ -49,12 +51,22 @@ extension GroupViewModel {
     }
     
     private func canCompleteGroup() {
-        debugPrint("test", groupName, groupName != "", !userList.isEmpty, groupName != "" && !userList.isEmpty)
         if groupName != "" && !userList.isEmpty {
             self.outputSubject.send(.isCompletePossible)
         }
         else {
             self.outputSubject.send(.isCompleteImpossible)
         }
+    }
+    
+    private func createGroup() {
+        if groupName != "" && !self.userList.isEmpty {
+            let createdGroup = GroupService.createGroup(name: groupName)
+            
+            self.userList.forEach {
+                MemberService.addMember(to: createdGroup, name: $0)
+            }
+        }
+        self.outputSubject.send(.createComplete)
     }
 }
