@@ -20,6 +20,16 @@ final class PaymentService {
         CoreDataManager.shared.saveContext()
     }
     
+    static func getPayment() -> [Payment] {
+        let request: NSFetchRequest<Payment> = Payment.fetchRequest()
+        do {
+            return try CoreDataManager.shared.context.fetch(request)
+        } catch {
+            debugPrint("Payment Get Error \(error)")
+            return []
+        }
+    }
+    
     static func deletePayment(payment: Payment) {
         CoreDataManager.shared.context.delete(payment)
         CoreDataManager.shared.saveContext()

@@ -103,7 +103,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
         let group = self.mainViewModel.groups[indexPath.row]
         cell.setName(group.name ?? "", indexPath.row)
-        debugPrint(group.name ?? "")
+
         return cell
     }
     
@@ -111,5 +111,14 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let width = collectionView.bounds.width
         let height: CGFloat = 120
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let group = self.mainViewModel.groups[indexPath.row]
+        let groupDetailViewController = GroupDetailViewController(viewModel: GroupDetailViewModel(group: group))
+        groupDetailViewController.modalPresentationStyle = .fullScreen
+
+        self.present(groupDetailViewController, animated: true)
+        
     }
 }

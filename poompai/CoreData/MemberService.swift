@@ -17,6 +17,16 @@ final class MemberService {
         CoreDataManager.shared.saveContext()
     }
     
+    static func getMembers() -> [Member] {
+        let request: NSFetchRequest<Member> = Member.fetchRequest()
+        do {
+            return try CoreDataManager.shared.context.fetch(request)
+        } catch {
+            debugPrint("Member Get Error \(error)")
+            return []
+        }
+    }
+    
     static func deleteMember(_ member: Member) {
         CoreDataManager.shared.context.delete(member)
         CoreDataManager.shared.saveContext()
