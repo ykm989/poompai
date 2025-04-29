@@ -109,7 +109,7 @@ private extension GroupDetailViewController {
 
 extension GroupDetailViewController {
     @objc func addPaymentButtonTouched() {
-        let viewController = AddPaymentViewController()
+        let viewController = AddPaymentViewController(participants: viewModel.memberList)
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
