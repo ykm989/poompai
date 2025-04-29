@@ -8,8 +8,8 @@
 import Foundation
 
 final class GroupDetailViewModel {
-    private let group: Group
-    private let memberList: [Member]
+    let group: Group
+    let memberList: [Member]
     let paymentList: [Payment]
     
     init(group: Group) {

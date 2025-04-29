@@ -24,14 +24,6 @@ final class GroupDetailViewController: UIViewController {
         return view
     }()
     
-    private let totalTitleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Total"
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        return label
-    }()
-    
     private let summaryCardView: SummaryCardView = {
         let summaryCardView = SummaryCardView()
         summaryCardView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,13 +62,14 @@ private extension GroupDetailViewController {
         setLayoutConstraints()
         summaryCardView.configure(totalAmount: 20000, memberCount: 5)
         addTargets()
+        setupNavigationBar()
     }
     
     private func addViews() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
     
-        [ totalTitleLabel, summaryCardView, paymentListView ].forEach {
+        [ summaryCardView, paymentListView ].forEach {
             scrollContentView.addSubview($0)
         }
     }
@@ -95,10 +88,7 @@ private extension GroupDetailViewController {
             scrollContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             scrollContentView.heightAnchor.constraint(equalToConstant: 1000),
             
-            totalTitleLabel.centerXAnchor.constraint(equalTo: self.scrollContentView.centerXAnchor),
-            totalTitleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            
-            summaryCardView.topAnchor.constraint(equalTo: self.totalTitleLabel.bottomAnchor, constant: 10),
+            summaryCardView.topAnchor.constraint(equalTo: self.scrollContentView.topAnchor, constant: 10),
             summaryCardView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
             summaryCardView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
             
@@ -111,10 +101,15 @@ private extension GroupDetailViewController {
     private func addTargets() {
         self.paymentListView.setAddPaymentButtonAction(#selector(addPaymentButtonTouched), target: self)
     }
+    
+    private func setupNavigationBar() {
+        self.navigationItem.title = viewModel.group.name
+    }
 }
 
 extension GroupDetailViewController {
     @objc func addPaymentButtonTouched() {
-        debugPrint("test")
+        let viewController = AddPaymentViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

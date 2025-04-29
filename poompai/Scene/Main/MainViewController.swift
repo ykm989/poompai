@@ -116,8 +116,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let group = self.mainViewModel.groups[indexPath.row]
         let groupDetailViewController = GroupDetailViewController(viewModel: GroupDetailViewModel(group: group))
-        groupDetailViewController.modalPresentationStyle = .fullScreen
-
-        self.present(groupDetailViewController, animated: true)
+        self.navigationController?.pushViewController(groupDetailViewController, animated: true)
     }
 }
