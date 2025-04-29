@@ -30,9 +30,10 @@ final class PaymentListView: UIView {
     private let addPaymentButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(" + 결제 추가", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
+        button.setTitle("결제 추가", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.contentHorizontalAlignment = .leading
         return button
     }()
@@ -65,7 +66,7 @@ final class PaymentListView: UIView {
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
-            addPaymentButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
+            addPaymentButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             addPaymentButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
             addPaymentButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
             addPaymentButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),

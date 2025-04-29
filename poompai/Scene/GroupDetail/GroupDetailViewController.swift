@@ -41,6 +41,7 @@ final class GroupDetailViewController: UIViewController {
     private let paymentListView: PaymentListView = {
         let view = PaymentListView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 15
         return view
     }()
 
