@@ -11,6 +11,40 @@ final class GroupDetailViewController: UIViewController {
     
     private let viewModel: GroupDetailViewModel
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    private let scrollContentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let totalTitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Total"
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        return label
+    }()
+    
+    private let summaryCardView: SummaryCardView = {
+        let summaryCardView = SummaryCardView()
+        summaryCardView.translatesAutoresizingMaskIntoConstraints = false
+        return summaryCardView
+    }()
+    
+    private let paymentListView: PaymentListView = {
+        let view = PaymentListView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    
     init(viewModel: GroupDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -22,6 +56,64 @@ final class GroupDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        setupUI()
+        paymentListView.paymentItems = viewModel.paymentList
+    }
+}
+
+// MARK: - UI Settings
+private extension GroupDetailViewController {
+    private func setupUI() {
+        self.view.backgroundColor = UIColor(named: "BackgroundColor")
+        addViews()
+        setLayoutConstraints()
+        summaryCardView.configure(totalAmount: 20000, memberCount: 5)
+        addTargets()
+    }
+    
+    private func addViews() {
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(scrollContentView)
+    
+        [ totalTitleLabel, summaryCardView, paymentListView ].forEach {
+            scrollContentView.addSubview($0)
+        }
+    }
+    
+    private func setLayoutConstraints() {
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            
+            scrollContentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            scrollContentView.leadingAnchor.constraint(equalTo: self.scrollView.leadingAnchor),
+            scrollContentView.trailingAnchor.constraint(equalTo: self.scrollView.trailingAnchor),
+            scrollContentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+            scrollContentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            scrollContentView.heightAnchor.constraint(equalToConstant: 1000),
+            
+            totalTitleLabel.centerXAnchor.constraint(equalTo: self.scrollContentView.centerXAnchor),
+            totalTitleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            
+            summaryCardView.topAnchor.constraint(equalTo: self.totalTitleLabel.bottomAnchor, constant: 10),
+            summaryCardView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
+            summaryCardView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
+            
+            paymentListView.topAnchor.constraint(equalTo: self.summaryCardView.bottomAnchor, constant: 10),
+            paymentListView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
+            paymentListView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
+        ])
+    }
+    
+    private func addTargets() {
+        self.paymentListView.setAddPaymentButtonAction(#selector(addPaymentButtonTouched), target: self)
+    }
+}
+
+extension GroupDetailViewController {
+    @objc func addPaymentButtonTouched() {
+        debugPrint("test")
     }
 }

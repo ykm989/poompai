@@ -10,7 +10,7 @@ import Foundation
 final class GroupDetailViewModel {
     private let group: Group
     private let memberList: [Member]
-    private let paymentList: [Payment]
+    let paymentList: [Payment]
     
     init(group: Group) {
         self.group = group

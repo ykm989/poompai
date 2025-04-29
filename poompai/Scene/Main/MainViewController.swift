@@ -119,6 +119,5 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         groupDetailViewController.modalPresentationStyle = .fullScreen
 
         self.present(groupDetailViewController, animated: true)
-        
     }
 }

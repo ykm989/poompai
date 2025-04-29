@@ -13,8 +13,10 @@
     </entity>
     <entity name="Payment" representedClassName="Payment" syncable="YES" codeGenerationType="class">
         <attribute name="amount" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="group" maxCount="1" deletionRule="Nullify" destinationEntity="Group"/>
         <relationship name="participants" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Member"/>
         <relationship name="payer" maxCount="1" deletionRule="Nullify" destinationEntity="Member"/>
