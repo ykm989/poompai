@@ -30,6 +30,16 @@ final class GroupDetailViewController: UIViewController {
         return summaryCardView
     }()
     
+    private let summationButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("요약", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        button.backgroundColor = UIColor(named: "GroupCellColor")
+        button.layer.cornerRadius = 15
+        return button
+    }()
+    
     private let paymentListView: PaymentListView = {
         let view = PaymentListView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -69,7 +79,7 @@ private extension GroupDetailViewController {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
     
-        [ summaryCardView, paymentListView ].forEach {
+        [ summaryCardView, paymentListView, summationButton ].forEach {
             scrollContentView.addSubview($0)
         }
     }
@@ -92,7 +102,11 @@ private extension GroupDetailViewController {
             summaryCardView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
             summaryCardView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
             
-            paymentListView.topAnchor.constraint(equalTo: self.summaryCardView.bottomAnchor, constant: 10),
+            summationButton.topAnchor.constraint(equalTo: self.summaryCardView.bottomAnchor, constant: 10),
+            summationButton.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
+            summationButton.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
+            
+            paymentListView.topAnchor.constraint(equalTo: self.summationButton.bottomAnchor, constant: 10),
             paymentListView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
             paymentListView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
         ])
@@ -110,6 +124,8 @@ private extension GroupDetailViewController {
 extension GroupDetailViewController {
     @objc func addPaymentButtonTouched() {
         let viewController = AddPaymentViewController(participants: viewModel.memberList)
-        self.navigationController?.pushViewController(viewController, animated: true)
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
     }
 }

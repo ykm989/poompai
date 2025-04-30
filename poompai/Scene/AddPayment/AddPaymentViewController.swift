@@ -22,6 +22,14 @@ final class AddPaymentViewController: UIViewController {
     
     // MARK: - UI Componenets
     
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(named: "BackgroundColor")
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
     private let titleTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -99,7 +107,7 @@ final class AddPaymentViewController: UIViewController {
 
 extension AddPaymentViewController {
     private func setupUI() {
-        self.view.backgroundColor = UIColor(named: "BackgroundColor")
+        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         addViews()
         addConstraints()
         setupNavigationBar()
@@ -108,40 +116,46 @@ extension AddPaymentViewController {
     }
     
     private func addViews() {
+        self.view.addSubview(containerView)
         [ titleTextField, amountTextField, payerSelectButton, participantsLabel, participantsTableView, completeButton ].forEach {
-            self.view.addSubview($0)
+            self.containerView.addSubview($0)
         }
     }
     
     private func addConstraints() {
         NSLayoutConstraint.activate([
-            titleTextField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            titleTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            titleTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            containerView.centerXAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerYAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: self.view.frame.height - 100),
+            containerView.widthAnchor.constraint(equalToConstant: self.view.frame.width - 50),
+            
+            titleTextField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            titleTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            titleTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             titleTextField.heightAnchor.constraint(equalToConstant: 50),
             
             amountTextField.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 10),
-            amountTextField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            amountTextField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            amountTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            amountTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             amountTextField.heightAnchor.constraint(equalToConstant: 50),
             
             payerSelectButton.topAnchor.constraint(equalTo: amountTextField.bottomAnchor, constant: 20),
-            payerSelectButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            payerSelectButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            payerSelectButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            payerSelectButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             payerSelectButton.heightAnchor.constraint(equalToConstant: 50),
             
             participantsLabel.topAnchor.constraint(equalTo: payerSelectButton.bottomAnchor, constant: 10),
-            participantsLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            participantsLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            participantsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            participantsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             
             participantsTableView.topAnchor.constraint(equalTo: participantsLabel.bottomAnchor, constant: 10),
-            participantsTableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            participantsTableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            participantsTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -110),
+            participantsTableView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            participantsTableView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            participantsTableView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -110),
             
             completeButton.topAnchor.constraint(equalTo: participantsTableView.bottomAnchor, constant: 20),
-            completeButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            completeButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            completeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            completeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             completeButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
@@ -161,6 +175,7 @@ extension AddPaymentViewController {
         titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         amountTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         payerSelectButton.addTarget(self, action: #selector(selectPayer), for: .touchUpInside)
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backGroundTouched)))
     }
     
     private func checkCompleted() {
@@ -205,6 +220,15 @@ extension AddPaymentViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true)
+    }
+    
+    @objc func backGroundTouched(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: self.view)
+
+           // 컨테이너 바깥을 눌렀을 때만 dismiss
+           if !containerView.frame.contains(location) {
+               dismiss(animated: true)
+           }
     }
 }
 
