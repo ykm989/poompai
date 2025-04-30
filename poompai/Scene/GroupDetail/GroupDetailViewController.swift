@@ -5,11 +5,14 @@
 //  Created by 김경호 on 4/29/25.
 //
 
+import Combine
 import UIKit
 
 final class GroupDetailViewController: UIViewController {
     
     private let viewModel: GroupDetailViewModel
+    private let inputSubject: PassthroughSubject<GroupDetailViewModel.Input, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -73,6 +76,7 @@ private extension GroupDetailViewController {
         summaryCardView.configure(totalAmount: 20000, memberCount: 5)
         addTargets()
         setupNavigationBar()
+        bind()
     }
     
     private func addViews() {
@@ -119,11 +123,23 @@ private extension GroupDetailViewController {
     private func setupNavigationBar() {
         self.navigationItem.title = viewModel.group.name
     }
+    
+    func bind() {
+        let outputSubject = viewModel.transfrom(with: inputSubject.eraseToAnyPublisher())
+        
+        outputSubject.receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                switch output {
+                case .addPaymentSuccess:
+                    debugPrint("ok")
+                }
+        }
+    }
 }
 
 extension GroupDetailViewController {
     @objc func addPaymentButtonTouched() {
-        let viewController = AddPaymentViewController(participants: viewModel.memberList)
+        let viewController = AddPaymentViewController(viewModel: self.viewModel, participants: viewModel.memberList)
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)

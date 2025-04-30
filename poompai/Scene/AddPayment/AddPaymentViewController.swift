@@ -9,6 +9,8 @@ import UIKit
 
 final class AddPaymentViewController: UIViewController {
     private let participants: [Member]
+    private let viewModel: GroupDetailViewModel
+    
     private var selectedParticipants: Set<String> = [] {
         didSet {
             checkCompleted()
@@ -88,8 +90,9 @@ final class AddPaymentViewController: UIViewController {
     
     // MARK: - Init
 
-    init(participants: [Member], nibName: String? = nil, bundle: Bundle? = nil) {
+    init(viewModel: GroupDetailViewModel, participants: [Member], nibName: String? = nil, bundle: Bundle? = nil) {
         self.participants = participants
+        self.viewModel = viewModel
         super.init(nibName: nibName, bundle: bundle)
     }
     
@@ -105,12 +108,13 @@ final class AddPaymentViewController: UIViewController {
     }
 }
 
+// MARK: - UI Settings
+
 extension AddPaymentViewController {
     private func setupUI() {
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         addViews()
         addConstraints()
-        setupNavigationBar()
         setDelegates()
         addTargets()
     }
@@ -160,12 +164,6 @@ extension AddPaymentViewController {
         ])
     }
     
-    private func setupNavigationBar() {
-        self.navigationItem.title = "정산 내용 추가"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .done, target: self, action: #selector(completeButtonTouched))
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
-    }
-    
     private func setDelegates() {
         self.participantsTableView.delegate = self
         self.participantsTableView.dataSource = self
@@ -175,6 +173,7 @@ extension AddPaymentViewController {
         titleTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         amountTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         payerSelectButton.addTarget(self, action: #selector(selectPayer), for: .touchUpInside)
+        
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backGroundTouched)))
     }
     
@@ -187,16 +186,17 @@ extension AddPaymentViewController {
         
         let isFormValid = isTitleFilled && isAmountFilled && isSelectedPayer && isSelectedParticipants
 
-        navigationItem.rightBarButtonItem?.isEnabled = isFormValid
         completeButton.isEnabled = isFormValid
         completeButton.backgroundColor = isFormValid ? UIColor(named: "GroupCellColor") : UIColor.systemGray4
         completeButton.setTitleColor(isFormValid ? .blue : .white, for: .normal)
     }
 }
 
+// MARK: - @objc
+
 extension AddPaymentViewController {
     @objc func completeButtonTouched() {
-        self.navigationController?.popViewController(animated: true)
+        self.dismiss(animated: true)
     }
     
     @objc func textFieldDidChange() {
