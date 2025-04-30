@@ -9,7 +9,7 @@ import CoreData
 import Foundation
 
 final class PaymentService {
-    static func addPayment(to group: Group, payer: Member, amount: Int64, participants: [Member]) {
+    static func addPayment(to group: Group, payer: Member, amount: Int64, participants: [Member], discountRate: Int64 = 0) {
         let payment = Payment(context: CoreDataManager.shared.context)
         payment.id = UUID()
         payment.amount = amount
@@ -17,6 +17,7 @@ final class PaymentService {
         payment.group = group
         payment.payer = payer
         payment.participants = NSSet(array: participants)
+        payment.discountRate = discountRate
         CoreDataManager.shared.saveContext()
     }
     

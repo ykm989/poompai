@@ -50,7 +50,7 @@ final class PaymentRowView: UIView {
         
         addViews()
         setLayoutConstraints()
-        titleLabel.text = payment.name
+        titleLabel.text = payment.title
         amountLabel.text = "\(payment.amount)원"
     }
     
