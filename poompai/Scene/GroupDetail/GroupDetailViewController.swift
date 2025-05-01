@@ -118,6 +118,7 @@ private extension GroupDetailViewController {
     
     private func addTargets() {
         self.paymentListView.setAddPaymentButtonAction(#selector(addPaymentButtonTouched), target: self)
+        self.summationButton.addTarget(self, action: #selector(summationButtonTouched), for: .touchUpInside)
     }
     
     private func setupNavigationBar() {
@@ -143,5 +144,10 @@ extension GroupDetailViewController {
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)
+    }
+    
+    @objc func summationButtonTouched() {
+        let viewController = SummationViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
