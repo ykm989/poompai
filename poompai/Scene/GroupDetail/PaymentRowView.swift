@@ -44,10 +44,10 @@ final class PaymentRowView: UIView {
     }
 
     private func setupView(payment: Payment) {
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor(named: "GroupCellColor")
         self.translatesAutoresizingMaskIntoConstraints = false
         self.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
+        self.layer.cornerRadius = 15
         addViews()
         setLayoutConstraints()
         titleLabel.text = payment.title

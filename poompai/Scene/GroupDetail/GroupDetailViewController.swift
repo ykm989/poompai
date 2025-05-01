@@ -125,7 +125,7 @@ private extension GroupDetailViewController {
     }
     
     func bind() {
-        let outputSubject = viewModel.transfrom(with: inputSubject.eraseToAnyPublisher())
+        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main)
             .sink { [weak self] output in
@@ -139,7 +139,7 @@ private extension GroupDetailViewController {
 
 extension GroupDetailViewController {
     @objc func addPaymentButtonTouched() {
-        let viewController = AddPaymentViewController(viewModel: self.viewModel, participants: viewModel.memberList)
+        let viewController = AddPaymentViewController(viewModel: self.viewModel)
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)

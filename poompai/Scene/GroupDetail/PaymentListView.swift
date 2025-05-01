@@ -34,6 +34,8 @@ final class PaymentListView: UIView {
         button.setTitle("결제 추가", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.layer.cornerRadius = 15
+        button.backgroundColor = UIColor(named: "GroupCellColor")
         button.contentHorizontalAlignment = .leading
         return button
     }()
@@ -66,11 +68,12 @@ final class PaymentListView: UIView {
             stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             
-            addPaymentButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            addPaymentButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            addPaymentButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10),
-            addPaymentButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            addPaymentButton.heightAnchor.constraint(equalToConstant: 44)
+            addPaymentButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            addPaymentButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10),
+            addPaymentButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            addPaymentButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            addPaymentButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            addPaymentButton.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
 
@@ -90,6 +93,7 @@ final class PaymentListView: UIView {
                 stackView.addArrangedSubview(separator)
             }
         }
+//        stackView.addArrangedSubview(addPaymentButton)
     }
 
     func setAddPaymentButtonAction(_ action: Selector, target: Any?) {
