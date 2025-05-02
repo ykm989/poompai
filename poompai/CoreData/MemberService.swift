@@ -17,8 +17,10 @@ final class MemberService {
         CoreDataManager.shared.saveContext()
     }
     
-    static func getMembers() -> [Member] {
+    static func getMembers(for group: Group) -> [Member] {
         let request: NSFetchRequest<Member> = Member.fetchRequest()
+        request.predicate = NSPredicate(format: "group == %@", group)
+        
         do {
             return try CoreDataManager.shared.context.fetch(request)
         } catch {

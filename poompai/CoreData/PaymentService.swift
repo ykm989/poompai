@@ -24,12 +24,14 @@ final class PaymentService {
         return payment
     }
     
-    static func getPayment() -> [Payment] {
+    static func getPayment(for group: Group) -> [Payment] {
         let request: NSFetchRequest<Payment> = Payment.fetchRequest()
+        request.predicate = NSPredicate(format: "group == %@", group)
+
         do {
             return try CoreDataManager.shared.context.fetch(request)
         } catch {
-            debugPrint("Payment Get Error \(error)")
+            debugPrint("Payment Fetch Error for group: \(error)")
             return []
         }
     }

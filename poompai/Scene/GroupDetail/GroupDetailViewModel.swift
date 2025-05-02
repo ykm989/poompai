@@ -26,8 +26,8 @@ final class GroupDetailViewModel {
     
     init(group: Group) {
         self.group = group
-        self.memberList = MemberService.getMembers()
-        self.paymentList = PaymentService.getPayment()
+        self.memberList = MemberService.getMembers(for: group)
+        self.paymentList = PaymentService.getPayment(for: group)
     }
 }
 
