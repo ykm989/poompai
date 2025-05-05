@@ -74,7 +74,7 @@ private extension GroupDetailViewController {
         self.view.backgroundColor = UIColor(named: "BackgroundColor")
         addViews()
         setLayoutConstraints()
-        summaryCardView.configure(totalAmount: 20000, memberCount: 5)
+        setupSummaryView()
         addTargets()
         setupNavigationBar()
         bind()
@@ -129,6 +129,11 @@ private extension GroupDetailViewController {
         self.navigationItem.rightBarButtonItem = barButton
     }
     
+    private func setupSummaryView() {
+        let totalAmount = self.viewModel.paymentList.reduce(into: 0) { $0 += Int($1.amount) }
+        summaryCardView.configure(totalAmount: totalAmount, memberCount: self.viewModel.memberList.count)
+    }
+    
     func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
@@ -137,6 +142,7 @@ private extension GroupDetailViewController {
                 switch output {
                 case let .addPaymentSuccess(payment):
                     self?.paymentListView.paymentItems.append(payment)
+                    self?.setupSummaryView()
                 case let .deleteGroupSuccess(group):
                     self?.onGroupDelete?(group)
                     self?.navigationController?.popViewController(animated: true)
