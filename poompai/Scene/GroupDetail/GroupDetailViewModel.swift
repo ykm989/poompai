@@ -11,7 +11,7 @@ import Foundation
 final class GroupDetailViewModel {
     let group: Group
     let memberList: [Member]
-    let paymentList: [Payment]
+    var paymentList: [Payment]
     
     private var subscriptions: Set<AnyCancellable> = []
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -50,6 +50,7 @@ extension GroupDetailViewModel {
                             }
                         }
                         GroupService.addPayment(group: group, payment)
+                        self?.paymentList.append(payment)
                         self?.outputSubject.send(.addPaymentSuccess(payment))
                     }
                 case .deleteGroup:
