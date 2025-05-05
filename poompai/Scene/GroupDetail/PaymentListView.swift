@@ -30,6 +30,7 @@ final class PaymentListView: UIView {
     private let addPaymentButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 0)
         button.setImage(UIImage(systemName: "plus.circle"), for: .normal)
         button.setTitle("결제 추가", for: .normal)
         button.setTitleColor(.blue, for: .normal)
