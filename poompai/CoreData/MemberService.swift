@@ -9,12 +9,13 @@ import CoreData
 import Foundation
 
 final class MemberService {
-    static func addMember(to group: Group, name: String) {
+    static func addMember(to group: Group, name: String) -> Member {
         let member = Member(context: CoreDataManager.shared.context)
         member.id = UUID()
         member.name = name
         member.group = group
         CoreDataManager.shared.saveContext()
+        return member
     }
     
     static func getMembers(for group: Group) -> [Member] {

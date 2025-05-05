@@ -18,10 +18,12 @@ final class GroupDetailViewModel {
     
     enum Input {
         case addPayment(amount: Int, payer: Member, participants: Set<Member>, title: String)
+        case deleteGroup
     }
     
     enum Output {
         case addPaymentSuccess
+        case deleteGroupSuccess(Group)
     }
     
     init(group: Group) {
@@ -43,13 +45,23 @@ extension GroupDetailViewModel {
                         let settlementAmount = Int(amount / Int(participants.count))
                         participants.forEach {
                             if payer != $0 {
-                                SettlementService.addPayment(to: payment, payer: payer, amount: Int64(settlementAmount), receiver: $0)
+                                let settlement = SettlementService.addSettlement(to: payment, payer: payer, amount: Int64(settlementAmount), receiver: $0)
+                                PaymentService.addSettlements(payment: payment, settlement)
                             }
                         }
+                        
+                        GroupService.addPayment(group: group, payment)
                     }
+                case .deleteGroup:
+                    self?.deleteGroup()
                 }
             }
             .store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
+    }
+    
+    func deleteGroup() {
+        GroupService.deleteGroup(group)
+        outputSubject.send(.deleteGroupSuccess(group))
     }
 }

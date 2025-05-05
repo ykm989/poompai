@@ -25,7 +25,7 @@ final class GroupViewModel: ObservableObject {
         case userAdd
         case isCompletePossible
         case isCompleteImpossible
-        case createComplete
+        case createComplete(Group)
     }
 }
 
@@ -62,11 +62,12 @@ extension GroupViewModel {
     private func createGroup() {
         if groupName != "" && !self.userList.isEmpty {
             let createdGroup = GroupService.createGroup(name: groupName)
-            
             self.userList.forEach {
-                MemberService.addMember(to: createdGroup, name: $0)
+                let member = MemberService.addMember(to: createdGroup, name: $0)
+                GroupService.addMember(group: createdGroup, member)
             }
+            
+            self.outputSubject.send(.createComplete(createdGroup))
         }
-        self.outputSubject.send(.createComplete)
     }
 }

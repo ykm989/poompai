@@ -36,6 +36,11 @@ final class PaymentService {
         }
     }
     
+    static func addSettlements(payment: Payment, _ settlement: Settlement) {
+        payment.addToSettlements(settlement)
+        CoreDataManager.shared.saveContext()
+    }
+    
     static func deletePayment(payment: Payment) {
         CoreDataManager.shared.context.delete(payment)
         CoreDataManager.shared.saveContext()

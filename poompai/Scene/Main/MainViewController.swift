@@ -5,13 +5,16 @@
 //  Created by 김경호 on 4/6/25.
 //
 
+import Combine
 import UIKit
 
 final class MainViewController: UIViewController {
     
-    // MARK: - UI Components
-    
     private let mainViewModel: MainViewModel
+    private let inputSubject: PassthroughSubject<MainViewModel.Input, Never> = .init()
+    private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - UI Components
     
     private let groupListView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -53,6 +56,7 @@ extension MainViewController {
         setLayoutConstraints()
         setupNavigation()
         delegates()
+        bind()
         self.view.backgroundColor = UIColor(named: "BackgroundColor")
         self.navigationItem.title = "뿜빠이"
     }
@@ -82,11 +86,29 @@ extension MainViewController {
     }
 }
 
+// MARK: - Bind
+private extension MainViewController {
+    func bind() {
+        let outputSubject = mainViewModel.transform(with: inputSubject.eraseToAnyPublisher())
+        
+        outputSubject.receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                switch output {
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
 // MARK: - Button Methods
 
 private extension MainViewController {
     @objc func groupAddButtonTouched() {
         let groupViewController = GroupViewController(viewModel: GroupViewModel())
+        groupViewController.onGroupCreated = { [weak self] in
+            self?.mainViewModel.groups.append($0)
+            self?.groupListView.reloadData()
+        }
         
         self.navigationController?.pushViewController(groupViewController, animated: true)
     }
@@ -116,6 +138,13 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let group = self.mainViewModel.groups[indexPath.row]
         let groupDetailViewController = GroupDetailViewController(viewModel: GroupDetailViewModel(group: group))
+        groupDetailViewController.onGroupDelete = { [weak self] in
+            if let firstIndex = self?.mainViewModel.groups.firstIndex(of: $0) {
+                self?.mainViewModel.groups.remove(at: firstIndex)
+                self?.groupListView.reloadData()
+            }
+        }
+        
         self.navigationController?.pushViewController(groupDetailViewController, animated: true)
     }
 }

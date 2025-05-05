@@ -29,6 +29,16 @@ final class GroupService {
         }
     }
     
+    static func addPayment(group: Group, _ payment: Payment) {
+        group.addToPayments(payment)
+        CoreDataManager.shared.saveContext()
+    }
+    
+    static func addMember(group: Group, _ member: Member) {
+        group.addToMembers(member)
+        CoreDataManager.shared.saveContext()
+    }
+    
     static func updateGroupName(_ group: Group, newName: String) {
         group.name = newName
         CoreDataManager.shared.saveContext()

@@ -17,7 +17,7 @@ final class SummationViewModel {
         self.paymentList = paymentList
         
         paymentList.forEach {
-            let settlement = SettlementService.getPayment(for: $0)
+            let settlement = SettlementService.getSettlements(for: $0)
             settlementList.append(contentsOf: settlement)
         }
         

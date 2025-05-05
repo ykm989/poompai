@@ -99,7 +99,9 @@ final class SummaryCardView: UIView {
     }
     
     func configure(totalAmount: Int, memberCount: Int) {
-        totalAmountLabel.text = "\(totalAmount)원"
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        totalAmountLabel.text = (numberFormatter.string(for: totalAmount) ?? "0") + "원"
         memberCountLabel.text = "\(memberCount)명"
     }
 }

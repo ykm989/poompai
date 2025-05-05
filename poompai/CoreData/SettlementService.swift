@@ -9,7 +9,7 @@ import CoreData
 import Foundation
 
 final class SettlementService {
-    static func addPayment(to payment: Payment, payer: Member, amount: Int64, receiver: Member) {
+    static func addSettlement(to payment: Payment, payer: Member, amount: Int64, receiver: Member) -> Settlement {
         let settlement = Settlement(context: CoreDataManager.shared.context)
         settlement.id = UUID()
         settlement.payment = payment
@@ -17,9 +17,11 @@ final class SettlementService {
         settlement.receiver = receiver
         settlement.amount = amount
         CoreDataManager.shared.saveContext()
+        
+        return settlement
     }
     
-    static func getPayment(for payment: Payment) -> [Settlement] {
+    static func getSettlements(for payment: Payment) -> [Settlement] {
         let request: NSFetchRequest<Settlement> = Settlement.fetchRequest()
         request.predicate = NSPredicate(format: "payment == %@", payment)
         do {
@@ -30,7 +32,7 @@ final class SettlementService {
         }
     }
     
-    static func deletePayment(settlement: Settlement) {
+    static func deleteSettlement(settlement: Settlement) {
         CoreDataManager.shared.context.delete(settlement)
         CoreDataManager.shared.saveContext()
     }

@@ -16,11 +16,9 @@ final class MainViewModel:ObservableObject {
     var groups: [Group]
     
     enum Input {
-
     }
     
     enum Output {
-
     }
     
     init() {
@@ -29,10 +27,11 @@ final class MainViewModel:ObservableObject {
 }
 
 extension MainViewModel {
-    func transfrom(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
+    func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input
             .sink { [weak self] input in
                 switch input {
+
                 }
             }
             .store(in: &subscriptions)

@@ -14,6 +14,7 @@ final class GroupViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private let viewModel: GroupViewModel
     private let inputSubject: PassthroughSubject<GroupViewModel.Input, Never> = .init()
+    var onGroupCreated: ((Group) -> Void)?
     
     // MARK: - UI Components
     
@@ -207,8 +208,10 @@ private extension GroupViewController {
                 case .isCompleteImpossible:
                     self?.completeBarButton.isEnabled = false
                     self?.completeBarButton.tintColor = .systemGray
-                case .createComplete:
+                case let .createComplete(group):
+                    self?.onGroupCreated?(group)
                     self?.navigationController?.popViewController(animated: true)
+                    
                 }
             }
             .store(in: &subscriptions)

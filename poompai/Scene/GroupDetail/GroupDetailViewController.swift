@@ -13,6 +13,7 @@ final class GroupDetailViewController: UIViewController {
     private let viewModel: GroupDetailViewModel
     private let inputSubject: PassthroughSubject<GroupDetailViewModel.Input, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
+    var onGroupDelete: ((Group) -> Void)?
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -123,6 +124,9 @@ private extension GroupDetailViewController {
     
     private func setupNavigationBar() {
         self.navigationItem.title = viewModel.group.name
+        let barButton = UIBarButtonItem(title: "삭제", style: .plain, target: self, action: #selector(deleteGroupButtonTouched))
+        barButton.tintColor = .systemRed
+        self.navigationItem.rightBarButtonItem = barButton
     }
     
     func bind() {
@@ -133,8 +137,12 @@ private extension GroupDetailViewController {
                 switch output {
                 case .addPaymentSuccess:
                     debugPrint("ok")
+                case let .deleteGroupSuccess(group):
+                    self?.onGroupDelete?(group)
+                    self?.navigationController?.popViewController(animated: true)
                 }
-        }
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -150,5 +158,16 @@ extension GroupDetailViewController {
         let viewModel = SummationViewModel(paymentList: self.viewModel.paymentList)
         let viewController = SummationViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func deleteGroupButtonTouched() {
+        let alertAction = UIAlertController(title: "그룹을 삭제하겠습니까?", message: "정말 삭제하시겠습니까?", preferredStyle: .alert)
+        
+        alertAction.addAction(UIAlertAction(title: "삭제", style: .destructive) { [weak self] _ in
+            self?.inputSubject.send(.deleteGroup)
+        })
+        alertAction.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        present(alertAction, animated: true)
     }
 }
