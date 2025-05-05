@@ -182,7 +182,7 @@ extension AddPaymentViewController {
     }
     
     private func checkCompleted() {
-        let isTitleFilled = (titleTextField.text?.count ?? 0 > 2)
+        let isTitleFilled = (titleTextField.text?.count ?? 0 > 0)
         let isAmountFilled = Int(amountTextField.text ?? "0") ?? 0 > 0
         
         let isSelectedPayer = !selectedParticipants.isEmpty
