@@ -51,7 +51,9 @@ final class PaymentRowView: UIView {
         addViews()
         setLayoutConstraints()
         titleLabel.text = payment.title
-        amountLabel.text = "\(payment.amount)원"
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        amountLabel.text = (numberFormatter.string(for: payment.amount) ?? "0") + "원"
     }
     
     private func addViews() {
