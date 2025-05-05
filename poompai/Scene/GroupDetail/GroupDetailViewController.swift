@@ -135,8 +135,8 @@ private extension GroupDetailViewController {
         outputSubject.receive(on: DispatchQueue.main)
             .sink { [weak self] output in
                 switch output {
-                case .addPaymentSuccess:
-                    debugPrint("ok")
+                case let .addPaymentSuccess(payment):
+                    self?.paymentListView.paymentItems.append(payment)
                 case let .deleteGroupSuccess(group):
                     self?.onGroupDelete?(group)
                     self?.navigationController?.popViewController(animated: true)

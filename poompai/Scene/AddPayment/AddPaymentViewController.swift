@@ -201,7 +201,8 @@ extension AddPaymentViewController {
             switch output {
             default: break
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
     }
 }
 

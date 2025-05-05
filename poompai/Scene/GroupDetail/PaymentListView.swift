@@ -94,7 +94,6 @@ final class PaymentListView: UIView {
                 stackView.addArrangedSubview(separator)
             }
         }
-//        stackView.addArrangedSubview(addPaymentButton)
     }
 
     func setAddPaymentButtonAction(_ action: Selector, target: Any?) {
