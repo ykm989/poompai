@@ -167,9 +167,13 @@ private extension GroupViewController {
         ])
     }
     
+    // MARK: - addTargets
     private func addTargets() {
         self.userAddButton.addTarget(self, action: #selector(addUserButtonTouched), for: .touchUpInside)
         self.groupNameTextField.addTarget(self, action: #selector(groupNameTextFieldDidChanged(_:)), for: .editingChanged)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundTouched))
+        
+        self.view.addGestureRecognizer(tapGesture)
     }
 }
 
@@ -188,6 +192,10 @@ private extension GroupViewController {
     @objc func groupNameTextFieldDidChanged(_ sender: Any?) {
         guard let groupName = self.groupNameTextField.text else { return }
         inputSubject.send(.groupNameInput(groupName))
+    }
+    
+    @objc func backgroundTouched(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
 }
 
