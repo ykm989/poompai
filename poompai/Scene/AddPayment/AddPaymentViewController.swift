@@ -242,17 +242,14 @@ extension AddPaymentViewController {
     }
     
     @objc func backGroundTouched(_ sender: UITapGestureRecognizer) {
-        self.view.endEditing(true)
         let location = sender.location(in: self.view)
         
         // 컨테이너 바깥을 눌렀을 때만 dismiss
         if !containerView.frame.contains(location) {
             dismiss(animated: true)
         }
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+        
+        self.view.endEditing(true)
     }
 }
 
