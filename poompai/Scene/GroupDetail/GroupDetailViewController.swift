@@ -44,13 +44,28 @@ final class GroupDetailViewController: UIViewController {
         return button
     }()
     
-    private let paymentListView: PaymentListView = {
-        let view = PaymentListView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 15
-        return view
+    private let paymentListView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(PaymentTableViewCell.self, forCellReuseIdentifier: PaymentTableViewCell.identifier)
+        
+        tableView.layer.cornerRadius = 15
+        tableView.backgroundColor = UIColor(named: "BackgroundColor")
+        tableView.layer.borderWidth = 1
+        return tableView
+    }()
+    
+    private let addPaymentButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "plus"), for: .normal)
+        button.setTitle("결제 추가", for: .normal)
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 8
+        return button
     }()
 
+    // MARK: - Init
     
     init(viewModel: GroupDetailViewModel) {
         self.viewModel = viewModel
@@ -61,14 +76,16 @@ final class GroupDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        paymentListView.paymentItems = viewModel.paymentList
     }
 }
 
 // MARK: - UI Settings
+
 private extension GroupDetailViewController {
     private func setupUI() {
         self.view.backgroundColor = UIColor(named: "BackgroundColor")
@@ -78,13 +95,14 @@ private extension GroupDetailViewController {
         addTargets()
         setupNavigationBar()
         bind()
+        setDelegate()
     }
     
     private func addViews() {
         self.view.addSubview(scrollView)
         scrollView.addSubview(scrollContentView)
     
-        [ summaryCardView, paymentListView, summationButton ].forEach {
+        [ summaryCardView, paymentListView, summationButton, addPaymentButton ].forEach {
             scrollContentView.addSubview($0)
         }
     }
@@ -114,12 +132,18 @@ private extension GroupDetailViewController {
             paymentListView.topAnchor.constraint(equalTo: self.summationButton.bottomAnchor, constant: 10),
             paymentListView.leadingAnchor.constraint(equalTo: self.scrollContentView.leadingAnchor, constant: 10),
             paymentListView.trailingAnchor.constraint(equalTo: self.scrollContentView.trailingAnchor, constant: -10),
+            paymentListView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
+            
+            addPaymentButton.topAnchor.constraint(equalTo: self.paymentListView.bottomAnchor, constant: 10),
+            addPaymentButton.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            addPaymentButton.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
+            addPaymentButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ])
     }
     
     private func addTargets() {
-        self.paymentListView.setAddPaymentButtonAction(#selector(addPaymentButtonTouched), target: self)
         self.summationButton.addTarget(self, action: #selector(summationButtonTouched), for: .touchUpInside)
+        self.addPaymentButton.addTarget(self, action: #selector(addPaymentButtonTouched), for: .touchUpInside)
     }
     
     private func setupNavigationBar() {
@@ -134,6 +158,11 @@ private extension GroupDetailViewController {
         summaryCardView.configure(totalAmount: totalAmount, memberCount: self.viewModel.memberList.count)
     }
     
+    private func setDelegate() {
+        self.paymentListView.delegate = self
+        self.paymentListView.dataSource = self
+    }
+    
     func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
@@ -141,7 +170,7 @@ private extension GroupDetailViewController {
             .sink { [weak self] output in
                 switch output {
                 case let .addPaymentSuccess(payment):
-                    self?.paymentListView.paymentItems.append(payment)
+                    self?.paymentListView.reloadData()
                     self?.setupSummaryView()
                 case let .deleteGroupSuccess(group):
                     self?.onGroupDelete?(group)
@@ -175,5 +204,25 @@ extension GroupDetailViewController {
         alertAction.addAction(UIAlertAction(title: "취소", style: .cancel))
         
         present(alertAction, animated: true)
+    }
+}
+
+extension GroupDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.viewModel.paymentList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PaymentTableViewCell.identifier, for: indexPath) as? PaymentTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        cell.setLabels(title: self.viewModel.paymentList[indexPath.row].title!, payment: self.viewModel.paymentList[indexPath.row])
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
 }
