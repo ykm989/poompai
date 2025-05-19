@@ -22,7 +22,7 @@ final class GroupDetailViewModel {
     }
     
     enum Output {
-        case addPaymentSuccess(Payment)
+        case addPaymentSuccess
         case deleteGroupSuccess(Group)
     }
     
@@ -51,7 +51,7 @@ extension GroupDetailViewModel {
                         }
                         GroupService.addPayment(group: group, payment)
                         self?.paymentList.append(payment)
-                        self?.outputSubject.send(.addPaymentSuccess(payment))
+                        self?.outputSubject.send(.addPaymentSuccess)
                     }
                 case .deleteGroup:
                     self?.deleteGroup()

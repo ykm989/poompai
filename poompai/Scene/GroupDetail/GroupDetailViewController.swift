@@ -169,7 +169,7 @@ private extension GroupDetailViewController {
         outputSubject.receive(on: DispatchQueue.main)
             .sink { [weak self] output in
                 switch output {
-                case let .addPaymentSuccess(payment):
+                case .addPaymentSuccess:
                     self?.paymentListView.reloadData()
                     self?.setupSummaryView()
                 case let .deleteGroupSuccess(group):
@@ -224,5 +224,13 @@ extension GroupDetailViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedPayment = self.viewModel.paymentList[indexPath.row]
+        let viewController = PaymentDetailViewController(viewModel: self.viewModel, indexPath.row)
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        self.present(viewController, animated: true)
     }
 }

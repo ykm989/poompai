@@ -72,7 +72,7 @@ final class PaymentTableViewCell: UITableViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: self.contentsView.leadingAnchor, constant: 20),
             
             settlementLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 3),
-            settlementLabel.leadingAnchor.constraint(equalTo: self.contentsView.leadingAnchor, constant: 10),
+            settlementLabel.leadingAnchor.constraint(equalTo: self.contentsView.leadingAnchor, constant: 20),
             
             amountLabel.topAnchor.constraint(equalTo: settlementLabel.bottomAnchor, constant: 3),
             amountLabel.trailingAnchor.constraint(equalTo: self.contentsView.trailingAnchor, constant: -10),

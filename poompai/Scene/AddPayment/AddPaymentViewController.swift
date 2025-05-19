@@ -230,7 +230,7 @@ extension AddPaymentViewController {
         for participant in self.viewModel.memberList {
             let action = UIAlertAction(title: participant.name, style: .default) { _ in
                 self.selectedPayer = participant
-                self.payerSelectButton.setTitle("결제자: \(participant.name ?? "")", for: .normal)
+                self.payerSelectButton.setTitle("\(participant.name ?? "")", for: .normal)
             }
             alertController.addAction(action)
         }

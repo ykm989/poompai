@@ -30,6 +30,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA0A26632DD1F7C7003B3629 /* Exceptions for "poompaiUITests" folder in "poompai" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PaymentTableViewCell.swift,
+			);
+			target = AA8BEE242DA24EEE000934B9 /* poompai */;
+		};
+		AA0A26642DD1F7C7003B3629 /* Exceptions for "poompaiUITests" folder in "poompaiUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PaymentTableViewCell.swift,
+			);
+			target = AA8BEE442DA24EEF000934B9 /* poompaiUITests */;
+		};
 		AA86AE732DBE8F03002F19AA /* Exceptions for "poompai" folder in "poompaiTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -71,6 +85,10 @@
 		};
 		AA8BEE482DA24EEF000934B9 /* poompaiUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AA0A26632DD1F7C7003B3629 /* Exceptions for "poompaiUITests" folder in "poompai" target */,
+				AA0A26642DD1F7C7003B3629 /* Exceptions for "poompaiUITests" folder in "poompaiUITests" target */,
+			);
 			path = poompaiUITests;
 			sourceTree = "<group>";
 		};
