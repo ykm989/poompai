@@ -18,6 +18,7 @@ final class GroupDetailViewModel {
     
     enum Input {
         case addPayment(amount: Int, payer: Member, participants: Set<Member>, title: String)
+        case deletePayment(index: Int)
         case deleteGroup
     }
     
@@ -52,6 +53,11 @@ extension GroupDetailViewModel {
                         GroupService.addPayment(group: group, payment)
                         self?.paymentList.append(payment)
                         self?.outputSubject.send(.addPaymentSuccess)
+                    }
+                case let .deletePayment(index):
+                    if let payment = self?.paymentList[index] {
+                        PaymentService.deletePayment(payment: payment)
+                        self?.paymentList.remove(at: index)
                     }
                 case .deleteGroup:
                     self?.deleteGroup()

@@ -233,4 +233,13 @@ extension GroupDetailViewController: UITableViewDelegate, UITableViewDataSource 
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            self.inputSubject.send(.deletePayment(index: indexPath.row))
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            
+        }
+    }
 }
