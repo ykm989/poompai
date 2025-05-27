@@ -190,8 +190,7 @@ extension GroupDetailViewController {
     }
     
     @objc func summationButtonTouched() {
-        let viewModel = SummationViewModel(paymentList: self.viewModel.paymentList)
-        let viewController = SummationViewController(viewModel: viewModel)
+        let viewController = SummationViewController(members: self.viewModel.memberList, payments: self.viewModel.paymentList)
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     

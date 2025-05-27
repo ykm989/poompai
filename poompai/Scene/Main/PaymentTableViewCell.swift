@@ -88,9 +88,9 @@ final class PaymentTableViewCell: UITableViewCell {
         var members: [String] = []
         let receiverName = payment.payer?.name ?? ""
         
-        if let settlements = payment.settlements as? Set<Settlement> {
-            for settlement in settlements {
-                members.append(settlement.payer?.name ?? "")
+        payment.participants?.forEach {
+            if let member = $0 as? Member {
+                members.append(member.name ?? "")
             }
         }
 
