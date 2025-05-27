@@ -1,5 +1,5 @@
 //
-//  SummationViewController.swift
+//  TotalSummationViewController.swift
 //  poompai
 //
 //  Created by 김경호 on 5/1/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SummationViewController: UIViewController {
+final class TotalSummationViewController: UIViewController {
     
     private let viewModel: SummationViewModel
     
@@ -51,11 +51,27 @@ final class SummationViewController: UIViewController {
     }
 }
 
-extension SummationViewController {
+extension TotalSummationViewController {
     func setupUI() {
         addTargets()
         setLayoutConstraints()
-        expenditureView.setSummary(amount: viewModel.recommendedTransfers.reduce(into: 0) { $0 += $1.amount }, startDate: "2025.04.02", endDate: "2025.04.03")
+        guard let earliestDate = viewModel.paymentList.min(by: { $0.createdAt ?? Date.distantFuture < $1.createdAt ?? Date.distantFuture })?.createdAt,
+              let latestDate = viewModel.paymentList.max(by: { $0.createdAt ?? Date.distantPast < $1.createdAt ?? Date.distantPast })?.createdAt else {
+            return
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"  // 또는 "yyyy-MM-dd" 등 원하시는 형식
+
+        let startDateString = formatter.string(from: earliestDate)
+        let endDateString = formatter.string(from: latestDate)
+
+        expenditureView.setSummary(amount: Int(viewModel.paymentList.reduce(into: Int64(0)) {
+            $0 += $1.amount
+        })
+                                   , startDate: startDateString
+        , endDate: endDateString
+        )
         transferTableView.dataSource = self
         transferTableView.delegate = self
     }
@@ -84,7 +100,7 @@ extension SummationViewController {
     }
 }
 
-extension SummationViewController: UITableViewDelegate, UITableViewDataSource {
+extension TotalSummationViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.recommendedTransfers.count
     }

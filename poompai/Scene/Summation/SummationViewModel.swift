@@ -8,7 +8,7 @@
 import Foundation
 
 final class SummationViewModel {
-    private let paymentList: [Payment]
+    let paymentList: [Payment]
     private var settlementList: [Settlement] = []
     private var balanceMap = [Member: Int]()
     var recommendedTransfers: [Transfer] = []
@@ -69,6 +69,10 @@ final class SummationViewModel {
             if debtors[dIndex].1 == 0 { dIndex += 1 }
             if creditors[cIndex].1 == 0 { cIndex += 1 }
         }
+        
+        recommendedTransfers.forEach {
+            debugPrint("\($0.amount)원 송금: \($0.from.name) -> \($0.to.name)")
+        }
     }
 }
 
@@ -78,5 +82,4 @@ extension SummationViewModel {
         let to: Member
         let amount: Int
     }
-
 }
