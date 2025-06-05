@@ -70,6 +70,9 @@ extension SummationViewController {
     func setupDelegate() {
         pageViewController.dataSource = self
         pageViewController.delegate = self
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor(named: "TextColor")  // 원하는 색상
+        ]
     }
     
     func configure() {

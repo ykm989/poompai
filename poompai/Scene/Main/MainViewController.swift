@@ -59,6 +59,9 @@ extension MainViewController {
         bind()
         self.view.backgroundColor = UIColor(named: "BackgroundColor")
         self.navigationItem.title = "뿜빠이"
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor(named: "TextColor")  // 원하는 색상
+        ]
     }
     
     private func addViews() {

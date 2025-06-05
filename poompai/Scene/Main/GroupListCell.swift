@@ -24,6 +24,7 @@ final class GroupListCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 25, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     

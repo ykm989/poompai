@@ -35,6 +35,7 @@ final class MemberSummationViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "0"
         label.font = .systemFont(ofSize: 40, weight: .bold)
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -210,6 +211,7 @@ extension MemberSummationViewController: UITableViewDelegate, UITableViewDataSou
         }
         cell.selectionStyle = .none
         cell.backgroundColor = UIColor(named: "GroupCellColor")
+        cell.textLabel?.textColor = UIColor(named: "TextColor")
         let recommendedTransfer = payments[indexPath.row]
         cell.textLabel?.text = "\(recommendedTransfer.payer?.name ?? "") <- \(recommendedTransfer.amount)"
 

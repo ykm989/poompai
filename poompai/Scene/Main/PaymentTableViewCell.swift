@@ -19,18 +19,21 @@ final class PaymentTableViewCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
     private let settlementLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
     private let amountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     

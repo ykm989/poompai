@@ -28,6 +28,7 @@ final class PaymentDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "제목"
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -39,6 +40,7 @@ final class PaymentDetailViewController: UIViewController {
         textField.leftViewMode = .always
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         textField.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        textField.textColor = UIColor(named: "TextColor")
         return textField
     }()
     
@@ -47,6 +49,7 @@ final class PaymentDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "금액"
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -58,6 +61,7 @@ final class PaymentDetailViewController: UIViewController {
         textField.leftViewMode = .always
         textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: 0))
         textField.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        textField.textColor = UIColor(named: "TextColor")
         return textField
     }()
     
@@ -66,6 +70,7 @@ final class PaymentDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "결제자"
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     

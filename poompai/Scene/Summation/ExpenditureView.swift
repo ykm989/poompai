@@ -25,6 +25,7 @@ final class ExpenditureView: UIView {
         label.textColor = .black
         label.textAlignment = .center
         label.text = "0"
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     

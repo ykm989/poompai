@@ -23,6 +23,7 @@ final class TotalSummationViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "추천 이체"
+        label.textColor = UIColor(named: "TextColor")
         return label
     }()
     
@@ -111,6 +112,7 @@ extension TotalSummationViewController: UITableViewDelegate, UITableViewDataSour
         cell.backgroundColor = UIColor(named: "GroupCellColor")
         let recommendedTransfer = viewModel.recommendedTransfers[indexPath.row]
         cell.textLabel?.text = "\(recommendedTransfer.to.name!) -> \(recommendedTransfer.from.name!) : \(recommendedTransfer.amount)"
+        cell.textLabel?.textColor = UIColor(named: "TextColor")
         return cell
     }
 }

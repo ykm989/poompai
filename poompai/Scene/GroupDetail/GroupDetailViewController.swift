@@ -89,6 +89,9 @@ final class GroupDetailViewController: UIViewController {
 private extension GroupDetailViewController {
     private func setupUI() {
         self.view.backgroundColor = UIColor(named: "BackgroundColor")
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor(named: "TextColor")  // 원하는 색상
+        ]
         addViews()
         setLayoutConstraints()
         setupSummaryView()
